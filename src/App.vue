@@ -5,8 +5,7 @@
 				<b-col>
 					<h1 class="h1">Add your tasks</h1>
 					<div class="row">
-						<input v-if="names.length === 0" v-on:keyup.enter="clickAdd()" placeholder="Enter your first task" type="text" v-model="name">
-						<input v-else placeholder="Enter your next task" type="text" v-model="name">
+						<input  v-on:keyup.enter="submitName()" :placeholder="placeholder" type="text" v-model="name">
 						<b-button id="add_button" class="btn-primary" @click="submitName()">Add</b-button>
 						<b-button class="btn-danger" @click="clearList(names)">Clear all</b-button>
 					</div>
@@ -39,6 +38,11 @@
 			}
 	
 		},
+		computed: {
+			placeholder(namesRef) {
+				return name.length === 0 ? "Enter your first task" : "Enter your next task"
+			}
+		},
 		firebase: {
 			names: namesRef,
 	
@@ -59,12 +63,7 @@
 				namesRef.remove();
 				this.name = ""; 
 			},
-			
-			clickAdd() {
-				let elef = "#add_button";
-				this.add.click()
-				console.log(add)
-			}
+
 	
 			////   Написать функцию очистки списка с подтверждением    //////
 	
