@@ -24,6 +24,7 @@
 </template>
 
 <script>
+
 	import {
 		namesRef
 	} from './firebase'
@@ -36,19 +37,32 @@
 			return {
 				name: ""
 			}
-	
 		},
-		computed: {
-			placeholder(namesRef) {
-				return name.length === 0 ? "Enter your first task" : "Enter your next task"
-			}
-		},
+
 		firebase: {
 			names: namesRef,
 	
+			
+			
+	
 		},
 	
+		computed: {
+			placeholder(namesRef) { 
+				let promo = 1
+				if (promo === 1) {
+					return "Enter your first task" 
+				} else {
+					return "Enter your next task"
+				}
+				
+			}
+		},
+
 		methods: {
+			fromArray(valueArray) {
+				valueArray.value(1)
+			},
 			submitName() {
 				namesRef.push({
 					name: this.name,
@@ -62,6 +76,7 @@
 				namesRef.remove();
 				namesRef.remove();
 				this.name = ""; 
+				console.log(fromArray(valueArray));
 			},
 
 	
