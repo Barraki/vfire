@@ -4,18 +4,21 @@
 			<b-row>
 				<b-col>
 					<h1 class="h1">Task manager</h1>
+	
 					<div class="row">
-						<input v-if="names.length === 0"  v-on:keyup.enter="submitName()" placeholder="Enter your first task" type="text" v-model="name">
-						<input v-else  v-on:keyup.enter="submitName()" placeholder="Enter your next task" type="text" v-model="name">
-						<b-button id="add_button" class="btn-primary" @click="submitName()">Add</b-button>
+						<input v-if="names.length === 0" name="task"    v-on:keydown.enter="submitName()" placeholder="Enter your first task" type="text" v-model="name">
+						<input v-else name="task"  v-on:keydown.enter="submitName()" placeholder="Enter your next task" type="text" v-model="name">
+						<b-button class="btn-primary" @click="submitName()">Add</b-button>
 						<b-button class="btn-danger" @click="clearList(names)">Clear all</b-button>
+							
 					</div>
+						<span class="errors" v-if="!this.submitForm">Please enter your task</span>
 					</b-col>
-					<div class="col-9">
-					<div class="list">
-						<ol>
+					<div class="col-12">
+					<div class="task-list">
+						<ul>
 							<li v-for="personName of names" v-bind:key="personName['.key']"> {{ personName.name }} </li>
-						</ol>
+						</ul>
 					</div>
 					</div>
 			</b-row>
@@ -38,35 +41,50 @@
 
 	data() {
 			return {
-				name: ""
+				name: "",
+				submitForm: true
 			}
 		},
 
 		firebase: {
 			names: namesRef,
 		},
+
+
 	
 		methods: {
 			submitName() {
-				namesRef.push({
+
+				const submitForm = true
+				if ( !this.name ) {
+					this.errors = "ошибка";
+					this.submitForm = false
+					
+
+				} else {
+					this.submitForm = true
+					namesRef.push({
 					name: this.name,
-					edit: false
+					edit: false,
+					
+					
 				});
+			
 				this.name = ""; 
 				return
+				
+				}
+
 			
 			},
-			clearList(namesArray) {
+			clearList() {
 				namesRef.remove();
 				namesRef.remove();
 				this.name = "";
 				
 			},
-			
-
 	
-			////   Написать функцию очистки списка с подтверждением    //////
-	
+			////   Написать функцию очистки списка с подтверждением    ///
 		}
 	
 	}
@@ -75,22 +93,46 @@
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css?family=Pacifico');
+@import url('https://fonts.googleapis.com/css?family=Fira+Sans');
 
-
-.list {
-	margin-top: 50px;
+.task-list {
+	margin-top: 25px;
+	font-family: 'Fira Sans', sans-serif;
 }
-.list ol {
+.task-list ul {
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
 	font-weight: bold;
+	flex-wrap: wrap
 	
 }
 
-.list ol li {
+
+.errors {
+			font-family: 'Pacifico', cursive;
+			color: red;
+			display: block;
+			height: 24px;
+			margin-top: 20px;
+			transition: 0.3s ease
+}
+
+
+.task-list ul li {
 	text-align: left;
-	padding-left: 20px;
-	text-transform: uppercase;
+	width: 31%;
+	padding: 10px;
+	text-transform: capitalize;
+	border-radius: 8px;
+	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+	transition: box-shadow 0.3s;
+
+}
+
+.task-list ul li:hover {
+			box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.08);
+
 }
 
 	#app {
@@ -104,6 +146,8 @@
 	
 	h1.h1 {
 		margin-bottom: 50px;
+		font-family: 'Pacifico', cursive;
+		font-size: 4.5rem;
 	}
 	
 	.row {
