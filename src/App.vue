@@ -3,9 +3,10 @@
 		<b-container>
 			<b-row>
 				<b-col>
-					<h1 class="h1">Add your tasks</h1>
+					<h1 class="h1">Task manager</h1>
 					<div class="row">
-						<input  v-on:keyup.enter="submitName()" :placeholder="placeholder" type="text" v-model="name">
+						<input v-if="names.length === 0"  v-on:keyup.enter="submitName()" placeholder="Enter your first task" type="text" v-model="name">
+						<input v-else  v-on:keyup.enter="submitName()" placeholder="Enter your next task" type="text" v-model="name">
 						<b-button id="add_button" class="btn-primary" @click="submitName()">Add</b-button>
 						<b-button class="btn-danger" @click="clearList(names)">Clear all</b-button>
 					</div>
@@ -17,7 +18,6 @@
 						</ol>
 					</div>
 					</div>
-				
 			</b-row>
 		</b-container>
 	</div>
@@ -28,6 +28,9 @@
 	import {
 		namesRef
 	} from './firebase'
+
+
+	
 	
 
 	export default {
@@ -41,28 +44,9 @@
 
 		firebase: {
 			names: namesRef,
-	
-			
-			
-	
 		},
 	
-		computed: {
-			placeholder(namesRef) { 
-				let promo = 1
-				if (promo === 1) {
-					return "Enter your first task" 
-				} else {
-					return "Enter your next task"
-				}
-				
-			}
-		},
-
 		methods: {
-			fromArray(valueArray) {
-				valueArray.value(1)
-			},
 			submitName() {
 				namesRef.push({
 					name: this.name,
@@ -72,12 +56,13 @@
 				return
 			
 			},
-			clearList() {
+			clearList(namesArray) {
 				namesRef.remove();
 				namesRef.remove();
-				this.name = ""; 
-				console.log(fromArray(valueArray));
+				this.name = "";
+				
 			},
+			
 
 	
 			////   Написать функцию очистки списка с подтверждением    //////
@@ -85,6 +70,8 @@
 		}
 	
 	}
+
+
 </script>
 
 <style>
